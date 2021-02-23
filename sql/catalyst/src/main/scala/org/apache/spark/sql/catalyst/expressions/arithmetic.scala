@@ -128,6 +128,11 @@ abstract class BinaryArithmetic extends BinaryOperator with NullIntolerant {
   def calendarIntervalMethod: String =
     sys.error("BinaryArithmetics must override either calendarIntervalMethod or genCode")
 
+  def runUsingWeld(str: String, str1: String): String = {
+
+    ""
+  }
+
   override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = dataType match {
     case _: DecimalType =>
       defineCodeGen(ctx, ev, (eval1, eval2) => s"$eval1.$decimalMethod($eval2)")
@@ -138,7 +143,13 @@ abstract class BinaryArithmetic extends BinaryOperator with NullIntolerant {
       defineCodeGen(ctx, ev,
         (eval1, eval2) => s"(${CodeGenerator.javaType(dataType)})($eval1 $symbol $eval2)")
     case _ =>
-      defineCodeGen(ctx, ev, (eval1, eval2) => s"$eval1 $symbol $eval2")
+      if (this.isInstanceOf[Add]) {
+        println("using code1")
+        defineCodeGen(ctx, ev,
+          (eval1, eval2) => s"org.apache.spark.weld.WeldUtil.runUsingWeld($eval1, $eval2)")
+      } else {
+        defineCodeGen(ctx, ev, (eval1, eval2) => s"$eval1 $symbol $eval2")
+      }
   }
 }
 

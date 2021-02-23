@@ -121,6 +121,7 @@ case class VecType(elementType: WeldType) extends WeldType {
 
 object VecType {
   def vecOf(elementType: WeldType): VecType = VecType(elementType)
+  def vecOfi64(): VecType = VecType(i64)
 }
 
 /**
