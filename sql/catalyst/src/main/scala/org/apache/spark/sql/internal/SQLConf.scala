@@ -1591,6 +1591,11 @@ object SQLConf {
        .doc("When true, use legacy MySqlServer SMALLINT and REAL type mapping.")
        .booleanConf
        .createWithDefault(false)
+
+  val WELD_EXECUTION_ENABLED = buildConf("spark.sql.weld.enabled")
+    .doc("When true, enable weld query execution.")
+    .booleanConf
+    .createWithDefault(false)
 }
 
 /**
@@ -2003,6 +2008,8 @@ class SQLConf extends Serializable with Logging {
 
   def legacyMsSqlServerNumericMappingEnabled: Boolean =
     getConf(LEGACY_MSSQLSERVER_NUMERIC_MAPPING_ENABLED)
+
+  def weldExecutionEnabled: Boolean = getConf(WELD_EXECUTION_ENABLED)
 
   /** ********************** SQLConf functionality methods ************ */
 

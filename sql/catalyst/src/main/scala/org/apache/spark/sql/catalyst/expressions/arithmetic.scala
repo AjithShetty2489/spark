@@ -22,6 +22,7 @@ import org.apache.spark.sql.catalyst.analysis.{TypeCheckResult, TypeCoercion}
 import org.apache.spark.sql.catalyst.expressions.codegen._
 import org.apache.spark.sql.catalyst.expressions.codegen.Block._
 import org.apache.spark.sql.catalyst.util.TypeUtils
+import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
 
@@ -143,7 +144,7 @@ abstract class BinaryArithmetic extends BinaryOperator with NullIntolerant {
       defineCodeGen(ctx, ev,
         (eval1, eval2) => s"(${CodeGenerator.javaType(dataType)})($eval1 $symbol $eval2)")
     case _ =>
-      if (this.isInstanceOf[Add]) {
+      if (this.isInstanceOf[Add] && SQLConf.get.weldExecutionEnabled) {
         println("using code1")
         defineCodeGen(ctx, ev,
           (eval1, eval2) => s"org.apache.spark.weld.WeldUtil.runUsingWeld($eval1, $eval2)")

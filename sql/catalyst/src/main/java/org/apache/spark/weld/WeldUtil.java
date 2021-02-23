@@ -34,8 +34,10 @@ public class WeldUtil {
 
     private static void initialize() {
         if(module == null) {
+            long start = System.nanoTime();
             String code1 = "|x:i64, y:i64| [x + y]";
             module = WeldModule.compile(code1);
+            System.out.println("Time to compile " + (System.nanoTime() - start));
         }
     }
 }
