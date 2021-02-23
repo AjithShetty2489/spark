@@ -25,14 +25,14 @@ public class WeldUtil {
 
     static WeldModule module;
 
-    public long runUsingWeld(long a, long b) {
+    public static long runUsingWeld(Long a, Long b) {
         initialize();
         final WeldValue value = struct(a, b).toValue();
         final WeldValue output = module.run(value);
         return output.result(vecOfi64()).getVec(0).getLong(0);
     }
 
-    private void initialize() {
+    private static void initialize() {
         if(module == null) {
             String code1 = "|x:i64, y:i64| [x + y]";
             module = WeldModule.compile(code1);
